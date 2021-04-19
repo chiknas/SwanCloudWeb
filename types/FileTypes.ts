@@ -4,7 +4,7 @@ export type FilesResponse = {
 };
 
 export type Node = {
-  id: number;
+  id: string;
   fileName: string;
   createdDate: Date;
 };

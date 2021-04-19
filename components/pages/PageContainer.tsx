@@ -1,14 +1,17 @@
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import styles from "styles/Home.module.css";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { InputBase } from "@material-ui/core";
+import { GlobalContextType, GlobalContext } from "services/GlobalContext";
+import { sha256 } from "js-sha256";
 
 export const PageContainer: React.FunctionComponent = ({ children }) => {
-  const [serverUrl, setServerUrl] = useState("");
-  const [password, setPassword] = useState("");
+  const { setServerUrl, setServerKey } = useContext<GlobalContextType>(
+    GlobalContext
+  );
 
   return (
     <>
@@ -26,7 +29,7 @@ export const PageContainer: React.FunctionComponent = ({ children }) => {
             <InputBase
               type="password"
               placeholder="Password"
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(event) => setServerKey(sha256(event.target.value))}
             />
           </div>
         </Toolbar>
