@@ -15,7 +15,7 @@ export const PageContainer: React.FunctionComponent = ({ children }) => {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="sticky">
         <Toolbar>
           <Typography variant="h6">Swan Cloud</Typography>
           <div className={styles.search}>
@@ -49,10 +49,19 @@ export const PageContainer: React.FunctionComponent = ({ children }) => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Typography variant="h6">
+            <Typography variant="subtitle1">
               Powered by{" "}
               <img src="/swan.svg" alt="Swan Logo" className={styles.logo} />{" "}
               <b>SwanCloud</b>
+            </Typography>
+          </a>
+          <a
+            href="https://github.com/chiknas/SwanCloudWeb"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Typography variant="subtitle2">
+              Source code: github.com/chiknas/SwanCloudWeb
             </Typography>
           </a>
         </footer>
