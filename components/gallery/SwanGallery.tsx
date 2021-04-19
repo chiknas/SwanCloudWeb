@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import Gallery from "react-photo-gallery";
+import Gallery, { PhotoProps } from "react-photo-gallery";
 import Carousel, { Modal, ModalGateway } from "react-images";
+import { FilesResponse } from "components/gallery/types";
 
 export const SwanGallery: React.FunctionComponent = () => {
-  const [photos, setPhotos] = useState([]);
+  const [photos, setPhotos] = useState<PhotoProps[]>([]);
   const [currentImage, setCurrentImage] = useState(0);
   const [viewerIsOpen, setViewerIsOpen] = useState(false);
 
@@ -20,13 +21,13 @@ export const SwanGallery: React.FunctionComponent = () => {
   useEffect(() => {
     fetch("http://localhost:8080/api/files?limit=50")
       .then((response) => response.json())
-      .then((response) => {
+      .then((response: FilesResponse) => {
         const data = response.nodes.map((node) => {
           return {
             src: `http://localhost:8080/api/files/thumbnail/${node.id}`,
             height: 1,
             width: 1,
-            caption: node.fileName,
+            alt: node.fileName,
           };
         });
         setPhotos(data);
@@ -46,8 +47,8 @@ export const SwanGallery: React.FunctionComponent = () => {
               currentIndex={currentImage}
               views={photos.map((photo) => ({
                 source: photo.src,
-                alt: photo.caption,
-                caption: photo.caption,
+                alt: photo.alt,
+                caption: photo.alt,
               }))}
             />
           </Modal>
