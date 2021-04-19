@@ -120,3 +120,12 @@
     flex-direction: column;
   }
 }
+
+.search {
+  position: "relative";
+  border-radius: 5px;
+  border-radius: 3;
+  background-color: #c0d2f8;
+  margin-left: 15px;
+  width: auto;
+}
