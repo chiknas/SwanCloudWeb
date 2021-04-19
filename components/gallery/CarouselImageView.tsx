@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ViewType } from "react-images";
 import { GlobalContextType, GlobalContext } from "services/GlobalContext";
 
 export type CarouselViewProps = {
   currentIndex?: number;
   innerProps?: { [key: string]: any };
-  views?: Array<ViewType>;
+  views?: any;
 };
 
 export const CarouselImageView: React.FunctionComponent<CarouselViewProps> = ({
@@ -17,22 +16,28 @@ export const CarouselImageView: React.FunctionComponent<CarouselViewProps> = ({
   const [image, setImage] = useState("");
 
   useEffect(() => {
-    fetch(`${serverUrl}/api/files/thumbnail/${views[currentIndex].alt}`, {
-      method: "GET",
-      headers: {
-        Authorization: serverKey,
-      },
-    })
-      .then((res) => res.blob())
-      .then((blob) => {
-        console.log(views);
-        setImage(URL.createObjectURL(blob));
-      });
+    if (views && currentIndex) {
+      fetch(`${serverUrl}/api/files/thumbnail/${views[currentIndex].alt}`, {
+        method: "GET",
+        headers: {
+          Authorization: serverKey,
+        },
+      })
+        .then((res) => res.blob())
+        .then((blob) => {
+          console.log(views);
+          setImage(URL.createObjectURL(blob));
+        });
+    }
   }, [currentIndex, serverUrl, serverKey]);
 
   return (
     <div {...innerProps} style={{ width: "100%", height: "auto" }}>
-      <img src={image} style={{ width: "100%", height: "auto" }} />
+      {image ? (
+        <img src={image} style={{ width: "100%", height: "auto" }} />
+      ) : (
+        <img src="/loading.gif" style={{ width: "100%", height: "auto" }} />
+      )}
     </div>
   );
 };

@@ -5,13 +5,15 @@ import { useFiles } from "hooks/useFiles";
 import { GlobalContextType, GlobalContext } from "services/GlobalContext";
 import { ThumbnailRenderer } from "components/gallery/ThumbnailRenderer";
 import { CarouselImageView } from "components/gallery/CarouselImageView";
+import { Button } from "@material-ui/core";
 
 export const SwanGallery: React.FunctionComponent = () => {
   const [photos, setPhotos] = useState<PhotoProps[]>([]);
   const [currentImage, setCurrentImage] = useState(0);
   const [viewerIsOpen, setViewerIsOpen] = useState(false);
   const { serverUrl, serverKey } = useContext<GlobalContextType>(GlobalContext);
-  const files = useFiles(serverUrl, serverKey, undefined);
+  const [cursor, setCursor] = useState<string | undefined>();
+  const files = useFiles(serverUrl, serverKey, cursor);
 
   const openLightbox = useCallback((event, { photo, index }) => {
     setCurrentImage(index);
@@ -41,13 +43,23 @@ export const SwanGallery: React.FunctionComponent = () => {
 
   return (
     <>
-      <Gallery
-        photos={photos}
-        onClick={openLightbox}
-        renderImage={(details) => {
-          return <ThumbnailRenderer details={details} />;
-        }}
-      />
+      {photos.length > 0 && [
+        <Gallery
+          photos={photos}
+          onClick={openLightbox}
+          renderImage={(details) => {
+            return <ThumbnailRenderer details={details} />;
+          }}
+        />,
+        <Button
+          onClick={() => {
+            setPhotos([]);
+            setCursor(files?.nextCursor);
+          }}
+        >
+          Next Page
+        </Button>,
+      ]}
       <ModalGateway>
         {viewerIsOpen ? (
           <Modal onClose={closeLightbox}>
@@ -60,7 +72,7 @@ export const SwanGallery: React.FunctionComponent = () => {
               currentIndex={currentImage}
               components={{ View: CarouselImageView }}
               views={photos.map((photo) => ({
-                source: photo.src,
+                source: "/loading.gif",
                 alt: photo.key,
                 caption: photo.alt,
               }))}

@@ -26,19 +26,31 @@ export const ThumbnailRenderer: React.FunctionComponent<ThumbnailRendererProps> 
   }, [serverUrl, serverKey]);
 
   return (
-    <img
-      src={image}
-      onClick={(event) =>
-        details.onClick &&
-        details.onClick(event, {
-          ...details.photo,
-          ...{ index: details.index },
-        })
-      }
-      style={{
-        height: details.photo.height,
-        width: details.photo.width,
-      }}
-    />
+    <>
+      {image ? (
+        <img
+          src={image}
+          onClick={(event) =>
+            details.onClick &&
+            details.onClick(event, {
+              ...details.photo,
+              ...{ index: details.index },
+            })
+          }
+          style={{
+            height: details.photo.height,
+            width: details.photo.width,
+          }}
+        />
+      ) : (
+        <img
+          src="/loading.gif"
+          style={{
+            height: details.photo.height,
+            width: details.photo.width,
+          }}
+        />
+      )}
+    </>
   );
 };
