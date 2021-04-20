@@ -46,6 +46,16 @@ export const SwanGallery: React.FunctionComponent = () => {
       {photos.length > 0 && [
         <Gallery
           photos={photos}
+          columns={(width) => {
+            if (width < 600) {
+              return 4;
+            } else if (width > 600 && width < 1200) {
+              return 6;
+            } else {
+              return 8;
+            }
+          }}
+          direction="column"
           onClick={openLightbox}
           renderImage={(details) => {
             return <ThumbnailRenderer details={details} />;
