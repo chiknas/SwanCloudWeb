@@ -14,9 +14,8 @@ export const CarouselImageView: React.FunctionComponent<CarouselViewProps> = ({
 }) => {
   const { serverUrl, serverKey } = useContext<GlobalContextType>(GlobalContext);
   const [image, setImage] = useState("");
-
   useEffect(() => {
-    if (views && currentIndex) {
+    if (views && currentIndex != undefined) {
       fetch(`${serverUrl}/api/files/thumbnail/${views[currentIndex].alt}`, {
         method: "GET",
         headers: {
@@ -24,12 +23,9 @@ export const CarouselImageView: React.FunctionComponent<CarouselViewProps> = ({
         },
       })
         .then((res) => res.blob())
-        .then((blob) => {
-          console.log(views);
-          setImage(URL.createObjectURL(blob));
-        });
+        .then((blob) => setImage(URL.createObjectURL(blob)));
     }
-  }, [currentIndex, serverUrl, serverKey]);
+  }, [currentIndex, views, serverUrl, serverKey]);
 
   return (
     <div {...innerProps} style={{ width: "100%", height: "auto" }}>

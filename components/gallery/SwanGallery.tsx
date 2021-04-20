@@ -10,6 +10,7 @@ import { Button } from "@material-ui/core";
 export const SwanGallery: React.FunctionComponent = () => {
   const [photos, setPhotos] = useState<PhotoProps[]>([]);
   const [currentImage, setCurrentImage] = useState(0);
+  const [carouselIndex, setCarouselIndex] = useState(0);
   const [viewerIsOpen, setViewerIsOpen] = useState(false);
   const { serverUrl, serverKey } = useContext<GlobalContextType>(GlobalContext);
   const [cursor, setCursor] = useState<string | undefined>();
@@ -22,6 +23,7 @@ export const SwanGallery: React.FunctionComponent = () => {
 
   const closeLightbox = () => {
     setCurrentImage(0);
+    setCarouselIndex(0);
     setViewerIsOpen(false);
   };
 
@@ -76,16 +78,18 @@ export const SwanGallery: React.FunctionComponent = () => {
             <Carousel
               trackProps={{
                 onViewChange: (view: number) => {
-                  setCurrentImage(view);
+                  setCarouselIndex(view);
                 },
               }}
-              currentIndex={currentImage}
+              currentIndex={carouselIndex}
               components={{ View: CarouselImageView }}
-              views={photos.map((photo) => ({
-                source: "/loading.gif",
-                alt: photo.key,
-                caption: photo.alt,
-              }))}
+              views={photos
+                .slice(currentImage, currentImage + 25)
+                .map((photo) => ({
+                  source: "/loading.gif",
+                  alt: photo.key,
+                  caption: photo.alt,
+                }))}
             />
           </Modal>
         ) : null}

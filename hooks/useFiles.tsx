@@ -10,7 +10,7 @@ export const useFiles = (
 
   useEffect(() => {
     const cursorUrlParam = cursor ? `cursor=${cursor}&` : "";
-    const limitParam = "limit=50";
+    const limitParam = "limit=1000";
 
     if (serverUrl && serverKey) {
       fetch(`${serverUrl}/api/files?${cursorUrlParam}${limitParam}`, {

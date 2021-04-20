@@ -1,14 +1,18 @@
 import Head from "next/head";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styles from "styles/Home.module.css";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { InputBase } from "@material-ui/core";
+import { Button, InputBase } from "@material-ui/core";
 import { GlobalContextType, GlobalContext } from "services/GlobalContext";
 import { sha256 } from "js-sha256";
+import IconButton from "@material-ui/core/IconButton";
+import HttpsRoundedIcon from "@material-ui/icons/HttpsRounded";
 
 export const PageContainer: React.FunctionComponent = ({ children }) => {
+  const [url, setUrl] = useState("");
+  const [key, setKey] = useState("");
   const { setServerUrl, setServerKey } = useContext<GlobalContextType>(
     GlobalContext
   );
@@ -22,16 +26,24 @@ export const PageContainer: React.FunctionComponent = ({ children }) => {
             <InputBase
               autoFocus={true}
               placeholder="Server URL"
-              onChange={(event) => setServerUrl(event.target.value)}
+              onChange={(event) => setUrl(event.target.value)}
             />
           </div>
           <div className={styles.search}>
             <InputBase
               type="password"
               placeholder="Password"
-              onChange={(event) => setServerKey(sha256(event.target.value))}
+              onChange={(event) => setKey(sha256(event.target.value))}
             />
           </div>
+          <IconButton
+            onClick={() => {
+              setServerUrl(url);
+              setServerKey(key);
+            }}
+          >
+            <HttpsRoundedIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
 
