@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import useOnScreen from "hooks/useOnHook";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { RenderImageProps } from "react-photo-gallery";
 import { GlobalContextType, GlobalContext } from "services/GlobalContext";
 
@@ -11,19 +12,23 @@ export const ThumbnailRenderer: React.FunctionComponent<ThumbnailRendererProps> 
 }) => {
   const { serverUrl, serverKey } = useContext<GlobalContextType>(GlobalContext);
   const [image, setImage] = useState("");
+  const ref = useRef();
+  const isVisible = useOnScreen(ref);
 
   useEffect(() => {
-    fetch(`${serverUrl}/api/files/thumbnail/${details.photo.key}`, {
-      method: "GET",
-      headers: {
-        Authorization: serverKey,
-      },
-    })
-      .then((res) => res.blob())
-      .then((blob) => {
-        setImage(URL.createObjectURL(blob));
-      });
-  }, [serverUrl, serverKey]);
+    if (isVisible) {
+      fetch(`${serverUrl}/api/files/thumbnail/${details.photo.key}`, {
+        method: "GET",
+        headers: {
+          Authorization: serverKey,
+        },
+      })
+        .then((res) => res.blob())
+        .then((blob) => {
+          setImage(URL.createObjectURL(blob));
+        });
+    }
+  }, [serverUrl, serverKey, isVisible]);
 
   return (
     <>
@@ -44,6 +49,7 @@ export const ThumbnailRenderer: React.FunctionComponent<ThumbnailRendererProps> 
         />
       ) : (
         <img
+          ref={ref}
           src="/loading.gif"
           style={{
             height: details.photo.height,
