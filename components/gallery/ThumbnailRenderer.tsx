@@ -12,7 +12,7 @@ export const ThumbnailRenderer: React.FunctionComponent<ThumbnailRendererProps> 
 }) => {
   const { serverUrl, serverKey } = useContext<GlobalContextType>(GlobalContext);
   const [image, setImage] = useState("");
-  const ref = useRef();
+  const ref = useRef<any>();
   const isVisible = useOnScreen(ref);
 
   useEffect(() => {

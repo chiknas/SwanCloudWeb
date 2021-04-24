@@ -67,6 +67,7 @@ export const SwanGallery: React.FunctionComponent = () => {
           onClick={() => {
             setPhotos([]);
             setCursor(files?.nextCursor);
+            window.scrollTo(0, 0);
           }}
         >
           Next Page
