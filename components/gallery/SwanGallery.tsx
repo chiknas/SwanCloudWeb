@@ -84,13 +84,14 @@ export const SwanGallery: React.FunctionComponent = () => {
               }}
               currentIndex={carouselIndex}
               components={{ View: CarouselImageView }}
-              views={photos
-                .slice(currentImage, currentImage + 25)
-                .map((photo) => ({
+              views={[
+                {
                   source: "/loading.gif",
-                  alt: photo.key,
-                  caption: photo.alt,
-                }))}
+                  // @ts-ignore: carousel can accept a custom type
+                  alt: photos[currentImage].key,
+                  caption: photos[currentImage].alt,
+                },
+              ]}
             />
           </Modal>
         ) : null}

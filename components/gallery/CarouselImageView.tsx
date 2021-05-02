@@ -16,7 +16,7 @@ export const CarouselImageView: React.FunctionComponent<CarouselViewProps> = ({
   const [image, setImage] = useState("");
   useEffect(() => {
     if (views && currentIndex != undefined) {
-      fetch(`${serverUrl}/api/files/thumbnail/${views[currentIndex].alt}`, {
+      fetch(`${serverUrl}/api/files/preview/${views[currentIndex].alt}`, {
         method: "GET",
         headers: {
           Authorization: serverKey,
