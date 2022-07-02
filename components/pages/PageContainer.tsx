@@ -9,41 +9,72 @@ import { GlobalContextType, GlobalContext } from "services/GlobalContext";
 import { sha256 } from "js-sha256";
 import IconButton from "@material-ui/core/IconButton";
 import HttpsRoundedIcon from "@material-ui/icons/HttpsRounded";
+import { useUploadFiles } from "hooks/useUploadFiles";
+import { ProgressBar } from "../progressbar/ProgressBar";
 
 export const PageContainer: React.FunctionComponent = ({ children }) => {
   const [url, setUrl] = useState("");
   const [key, setKey] = useState("");
-  const { setServerUrl, setServerKey } = useContext<GlobalContextType>(
-    GlobalContext
-  );
+  const { serverUrl, serverKey, setServerUrl, setServerKey } =
+    useContext<GlobalContextType>(GlobalContext);
+
+  const [files, setFiles] = useState<FileList | null>(null);
+  const [upload, progress, uploading] = useUploadFiles();
 
   return (
     <>
       <AppBar position="sticky">
         <Toolbar>
-          <Typography variant="h6">Swan Cloud</Typography>
-          <div className={styles.search}>
-            <InputBase
-              autoFocus={true}
-              placeholder="Server URL"
-              onChange={(event) => setUrl(event.target.value)}
-            />
-          </div>
-          <div className={styles.search}>
-            <InputBase
-              type="password"
-              placeholder="Password"
-              onChange={(event) => setKey(sha256(event.target.value))}
-            />
-          </div>
-          <IconButton
-            onClick={() => {
-              setServerUrl(url);
-              setServerKey(key);
-            }}
-          >
-            <HttpsRoundedIcon />
-          </IconButton>
+          <Typography variant="h6" style={{ marginRight: "1rem" }}>
+            Swan Cloud
+          </Typography>
+          {(!serverUrl || !serverKey) && (
+            <>
+              <div className={styles.search}>
+                <InputBase
+                  autoFocus={true}
+                  placeholder="Server URL"
+                  onChange={(event) => setUrl(event.target.value)}
+                />
+              </div>
+              <div className={styles.search}>
+                <InputBase
+                  type="password"
+                  placeholder="Password"
+                  onChange={(event) => setKey(sha256(event.target.value))}
+                />
+              </div>
+              <IconButton
+                onClick={() => {
+                  setServerUrl(`https://${url}`);
+                  setServerKey(key);
+                }}
+              >
+                <HttpsRoundedIcon />
+              </IconButton>
+            </>
+          )}
+          {serverKey && serverUrl && !uploading && (
+            <>
+              <input
+                type="file"
+                multiple
+                onChange={(e) => setFiles(e.currentTarget.files)}
+              />
+              <Button onClick={() => files !== null && upload(files)}>
+                Upload
+              </Button>
+              <Button
+                onClick={() => {
+                  setServerUrl("");
+                  setServerKey("");
+                }}
+              >
+                Logout
+              </Button>
+            </>
+          )}
+          {uploading && <ProgressBar progress={progress} />}
         </Toolbar>
       </AppBar>
 

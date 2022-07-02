@@ -7,16 +7,16 @@ export type ThumbnailRendererProps = {
   details: RenderImageProps;
 };
 
-export const ThumbnailRenderer: React.FunctionComponent<ThumbnailRendererProps> = ({
-  details,
-}) => {
+export const ThumbnailRenderer: React.FunctionComponent<
+  ThumbnailRendererProps
+> = ({ details }) => {
   const { serverUrl, serverKey } = useContext<GlobalContextType>(GlobalContext);
   const [image, setImage] = useState("");
   const ref = useRef<any>();
   const isVisible = useOnScreen(ref);
 
   useEffect(() => {
-    if (isVisible) {
+    if (isVisible && serverUrl && serverKey) {
       fetch(`${serverUrl}/api/files/thumbnail/${details.photo.key}`, {
         method: "GET",
         headers: {

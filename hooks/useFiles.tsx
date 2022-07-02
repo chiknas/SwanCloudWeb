@@ -12,7 +12,7 @@ export const useFiles = (
     const cursorUrlParam = cursor ? `cursor=${cursor}&` : "";
     const limitParam = "limit=1000";
 
-    if (serverUrl && serverKey) {
+    if (serverUrl !== "" && serverKey !== "") {
       fetch(`${serverUrl}/api/files?${cursorUrlParam}${limitParam}`, {
         method: "GET",
         headers: {
@@ -30,6 +30,11 @@ export const useFiles = (
         .catch((error) => {
           console.error(error);
         });
+    } else {
+      setData({
+        nextCursor: "",
+        nodes: [],
+      });
     }
   }, [cursor, serverUrl, serverKey]);
 
